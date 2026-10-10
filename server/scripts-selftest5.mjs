@@ -1,0 +1,22 @@
+import assert from 'node:assert';
+import { plausible, clampNext, mentionsDiscomfort } from './src/services/runMath.js';
+import { reflect, fallbackReflection } from './src/services/ai/runReflectionAIService.js';
+import { acceptFix, cumulative, routeProgress, nextCheckpoint } from '../client/src/lib/tracker.js';
+import { destination } from './src/services/geo.js';
+assert(plausible(1800, 5000) && !plausible(60, 5000) && !plausible(3600, 100) && plausible(3000, 5000));
+assert.equal(clampNext(20, 5), 6.5); assert.equal(clampNext(1, 5), 2.5); assert.equal(clampNext(5, 5), 5);
+assert(mentionsDiscomfort('my knee started to hurt') && !mentionsDiscomfort('great run, loved the park'));
+const facts = { distanceKm: 5, durationSec: 1800 };
+let r = await reflect({ facts, text: 'x', recentKm: [] }, async () => ({ summary: 'Strong finish today.', highlight: 'Strong finish', nextRun: { distanceKm: 12, kind: 'long', note: 'Go long next time.' } }));
+assert(r.ai.used && r.nextRun.distanceKm === 6.5, 'AI suggestion clamped to +25%');
+r = await reflect({ facts, text: 'x', recentKm: [] }, async () => { throw new Error('down'); }); assert(!r.ai.used && r.summary.includes('5 km'));
+// GPS: standing still adds nothing, a 20 m step adds ~20 m, a 5 km jump is ignored, bad accuracy ignored
+const o = [19.45, 72.79], p2 = destination(o, 90, 20), far = destination(o, 90, 5000);
+assert.equal(acceptFix({ lat: o[0], lng: o[1], t: 0 }, { lat: o[0], lng: o[1], acc: 5, t: 5000 }).add, 0);
+const step = acceptFix({ lat: o[0], lng: o[1], t: 0 }, { lat: p2[0], lng: p2[1], acc: 5, t: 8000 }); assert(step.add > 19 && step.add < 21);
+assert.equal(acceptFix({ lat: o[0], lng: o[1], t: 0 }, { lat: far[0], lng: far[1], acc: 5, t: 10000 }).add, 0);
+assert.equal(acceptFix({ lat: o[0], lng: o[1], t: 0 }, { lat: p2[0], lng: p2[1], acc: 80, t: 8000 }).add, 0);
+const line = Array.from({ length: 51 }, (_, i) => destination(o, 90, i * 100)); const cum = cumulative(line);
+const pr = routeProgress(line, cum, destination(o, 90, 2310)); assert(pr.alongM > 2250 && pr.alongM < 2350 && pr.offRouteM < 60);
+assert.equal(nextCheckpoint(2300, 5000).label, '3 km mark'); assert.equal(nextCheckpoint(4950, 5000).label, 'Finish');
+console.log('part 5 selftest passed');

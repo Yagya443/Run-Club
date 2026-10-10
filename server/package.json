@@ -1,0 +1,12 @@
+{ "name": "run-club-server", "version": "0.1.0", "type": "module",
+  "scripts": {
+    "dev": "node --watch --env-file=.env src/index.js",
+    "start": "node --env-file=.env src/index.js",
+    "db:connect": "node --env-file=.env -e \"import('./src/config/db.js').then(async m => { await m.connectDatabase(); console.log('Connected to MongoDB'); await m.disconnectDatabase(); })\"",
+    "db:seed": "node --env-file=.env scripts/seed.js",
+    "test": "node scripts-selftest.mjs && node scripts-selftest3.mjs && node scripts-selftest4.mjs && node scripts-selftest5.mjs && node scripts-smoke.mjs" },
+  "dependencies": {
+    "mongoose": "^8.9.5", "bcryptjs": "^2.4.3", "cors": "^2.8.5",
+    "express": "^4.19.2", "express-rate-limit": "^7.4.0", "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2", "zod": "^3.23.8" },
+  "devDependencies": {} }

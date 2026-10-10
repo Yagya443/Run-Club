@@ -1,0 +1,14 @@
+@tailwind base; @tailwind components; @tailwind utilities;
+@layer base {
+  body { @apply bg-paper text-ink font-sans antialiased; }
+  h1, h2, h3 { @apply font-display tracking-tight; }
+  :focus-visible { @apply outline outline-2 outline-offset-2 outline-forest; }
+}
+@media (prefers-reduced-motion: reduce) { *, ::before, ::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; } }
+@layer components {
+  .btn { @apply inline-flex items-center justify-center gap-2 rounded-lg px-5 py-3 text-sm font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed; }
+  .btn-primary { @apply btn bg-forest text-white hover:bg-forest-dark; }
+  .btn-ghost { @apply btn border border-line bg-white text-ink hover:border-forest; }
+  .field { @apply w-full rounded-lg border border-line bg-white px-3.5 py-3 text-base placeholder:text-stone/60 focus:border-forest; }
+  .panel { @apply rounded-lg border border-line bg-white p-5; }
+}
