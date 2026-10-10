@@ -36,7 +36,7 @@ export async function createGroupRun(userId, b) {
   const distanceM = Math.round(pathLengthM(b.geometry));
   const loc = await Location.create({ label: b.meetingPoint.label, lat: b.meetingPoint.lat, lng: b.meetingPoint.lng, area: b.meetingPoint.label });
   const route = await Route.create({ type: b.routeType, distanceM, difficulty: b.difficulty, geometry: b.geometry, startId: loc.id });
-  const run = await Run.create({ title: b.title, description: b.description, hostId: userId, routeId: route.id, meetingPointId: loc.id, clubId: b.clubId ?? null, visibility: b.clubId ? 'PUBLIC' : 'PRIVATE', scheduledAt: b.scheduledAt });
+  const run = await Run.create({ title: b.title, description: b.description, hostId: userId, routeId: route.id, meetingPointId: loc.id, clubId: b.clubId ?? null, visibility: b.visibility ?? (b.clubId ? 'PUBLIC' : 'PRIVATE'), scheduledAt: b.scheduledAt });
   await RunParticipant.insertMany([{ runId: run.id, userId, status: 'JOINED' }, ...b.runners.map((r) => ({ runId: run.id, userId: r.userId, status: 'INVITED', matchScore: r.score, matchReason: r.reason }))]);
   return { runId: run.id, title: run.title, distanceKm: +(distanceM / 1000).toFixed(1), invited: ids.length };
 }

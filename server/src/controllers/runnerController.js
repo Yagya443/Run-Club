@@ -19,6 +19,7 @@ export const createSchema = z.object({ date, title: z.string().trim().min(3).max
   routeType: generateSchema.shape.routeType, difficulty: generateSchema.shape.difficulty,
   meetingPoint: z.object({ label: z.string().min(1).max(200), lat, lng }), geometry: z.array(z.tuple([lat, lng])).min(2).max(6000),
   clubId: z.string().optional(),
+  visibility: z.enum(['PUBLIC', 'PRIVATE']).optional(),
   runners: z.array(z.object({ userId: z.string(), score: z.number().int().min(0).max(100), reason: z.string().max(220) })).max(7).default([]) });
 
 // Deterministic discovery only (no AI). Query: lat,lng,date,time,distanceKm,level,radiusKm.

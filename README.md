@@ -8,6 +8,7 @@ Open technology throughout: React, Express, MongoDB, OpenStreetMap, Leaflet, OSR
 
 - **Automatic loop routes.** Pick a start, distance, date and time. The server generates candidate loops (or out-and-backs) through the routing engine, rejects any more than 10% off your distance, scores the rest and shows the best three.
 - **Run with someone.** Compatible runners are found by distance apart, start time, run length, pace and experience. Every score shows its breakdown. A local model writes the one-line explanation.
+- **Open group runs.** If nobody matches yet, plan an open run that other signed-in Run Club users can find in Discover and join.
 - **Group runs.** A meeting point is computed from everyone's start, snapped to the road network, and a route is generated from it. Other runners are invited and join when they accept.
 - **Clubs and social.** Clubs, public group runs, Discover, profiles, follow, kudos, comments, sharing.
 - **Active run.** Time, GPS distance, route progress and next checkpoint on one calm screen. Works offline.

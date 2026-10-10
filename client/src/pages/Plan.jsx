@@ -264,6 +264,7 @@ export default function Plan() {
                 meetingPoint: plan.meetingPoint,
                 geometry: plan.route.coords,
                 runners,
+                visibility: selected.length ? "PRIVATE" : "PUBLIC",
             });
             nav("/home");
         } catch (err) {
@@ -609,8 +610,9 @@ export default function Plan() {
                                 : plan.ai.error}
                         </p>
                         <p className="text-xs text-stone">
-                            Other runners are invited, not confirmed. They join
-                            once they accept (Part 4).
+                            {selected.length
+                                ? "Selected runners are invited. They can accept the invitation to join."
+                                : "This is an open run. Other Run Club users can find it in Discover and join."}
                         </p>
                         <div className="flex gap-2">
                             <button
